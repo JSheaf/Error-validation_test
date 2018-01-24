@@ -10,7 +10,7 @@
                 <ul class="error-list">
                     <li class="label-error a"><a href="#internalService">Select a service type</a></li>
 
-                    <li class="other-error label-error"><a href="#otherOpt">Provide an 'other' option</a></li>
+                    <li class="other-error label-error"><a href="#otherOpt">Provide other service type</a></li>
                 </ul>
             </div>
 
@@ -144,6 +144,7 @@
                 if (otherChoice.length > 0) {
                     member.questions.requestType.push(otherChoice);
                 } else {
+                    member.questions.requestType.push('other');
                     $('#qotherOpt').addClass('error');
                     $('.other-error.label-error').show();
                     $('.error-summary').show();
