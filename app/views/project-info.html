@@ -1,0 +1,178 @@
+{% extends 'layout-fixed.html' %} {% block head %} {% include 'includes/head.html' %} {% endblock %} {% block content %} {% include 'includes/back.html' %}
+
+<main id="content" role="main">
+    <div class="grid-row">
+        <div class="column-two-thirds">
+
+            <div class="error-summary hide">
+                <div class="error-title">There was a problem</div>
+                <div class="error-description">Please amend the following details:</div>
+                <ul class="error-list">
+                    <li class="label-error a"><a href="#internalService">Select a service type</a></li>
+
+                    <li class="other-error label-error"><a href="#otherOpt">Provide an other option</a></li>
+                </ul>
+            </div>
+
+            <h1 class="heading-large">What type of request do you have?</h1>
+
+            <form>
+
+                <div id="question" class="form-group">
+
+                    <fieldset>
+
+                        <legend>
+                            Select all that apply
+                        </legend>
+
+                        <div class="label-error a hide">
+                            Select a contact method
+                        </div>
+
+                        <div class="multiple-choice">
+                            <input id="internalService" name="requestType" type="checkbox" value="Internal">
+                            <label for="internalService">Internal DVLA service</label>
+                        </div>
+
+                        <div class="multiple-choice">
+                            <input id="improvmentChoice" name="requestType" type="checkbox" value="improvment">
+                            <label for="improvmentChoice">Continuous improvment</label>
+                        </div>
+                        
+                        <div class="multiple-choice">
+                            <input id="patchChoice" name="requestType" type="checkbox" value="Missionpatch">
+                            <label for="patchChoice">Mission Patches</label>
+                        </div>
+                        
+                        <div class="multiple-choice">
+                            <input id="digitalChoice" name="requestType" type="checkbox" value="Digitalservice">
+                            <label for="digitalChoice">Digital services</label>
+                        </div>
+                        
+                        <div class="multiple-choice">
+                            <input id="accessibilityChoice" name="requestType" type="checkbox" value="Accessibility">
+                            <label for="accessibilityChoice">Accessibility auditing</label>
+                        </div>
+                        
+                        <div class="multiple-choice margin-bottom-5">
+                            <input id="otherChoice" name="requestType" type="checkbox" value="Other">
+                            <label for="otherChoice">Other</label>
+                        </div>
+
+                    </fieldset>
+
+                    <div id="otherOption" class="form-group hide">
+
+                        <div class="inset" id="qotherOpt">
+                            <label for="otherOpt">
+                                <div class="label-title">Other option</div>
+                                <div class="other-error label-error">Provide other service type</div>
+                                <input class="form-control form-control-1-4" id="otherOpt" name="otherOpt" type="text" value="">
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+            <button class="btn btn-primary">Next</button>
+        </div>
+    </div>
+</main>
+
+<script type="text/javascript">
+    $(".btn-primary").click(function () {
+        // Enter function name here
+        validate();
+    });
+
+    if (member.questions === undefined) {
+        member.questions = {};
+    }
+    
+    // Hide before rechecking validation
+        hideerror('.label-error');
+        $(".error").removeClass("error ");
+        $('.error-summary').hide();
+
+    // Check if user has been sent back from summary page
+    var changing = location.search.split('change=')[1];
+
+    $(document).ready(checkSelected());
+
+    $("input[name='requestType']").change(function () {
+
+        hideerror('.label-error');
+        $(".error").removeClass("error ");
+        $('.error-summary').hide();
+
+        checkSelected();
+    });
+
+    function checkSelected() {
+        if ($('input[id=otherChoice]:checked').val() === 'Other') {
+            $('#otherOption').show();
+        } else {
+            $('#otherOption').hide();
+        }
+    }
+
+    function validate() {
+        var validInput = true;
+        
+        // Hide before rechecking validation
+        hideerror('.label-error');
+        $(".error").removeClass("error ");
+        $('.error-summary').hide();
+
+        var request = $('input[name=requestType]:checked').val;
+        var otherChoice = $('input[name=otherOpt]').val();
+        
+        var other = false;
+
+        if ($('input[id=otherChoice]:checked').length === 1) {
+            other = true;
+        }
+
+        member.questions.requestType = [];
+        
+        //this part is what tells member to remember more than one value
+        $('input[name=requestType]:checked').each(function(num, el) {
+            var v = el.getAttribute('value');
+            
+            if (v == 'Other') {
+                if (otherChoice.length > 0) {
+                    member.questions.requestType.push(otherChoice);
+                } else {
+                    $('#qotherOpt').addClass('error');
+                    $('.other-error.label-error').show();
+                    $('.error-summary').show();
+                    $('body').scrollTop(0);
+                    $('.error-summary').focus();
+                    validInput = false;
+                }
+            } else {
+                member.questions.requestType.push(v);
+            }
+            
+        });
+        
+        if (member.questions.requestType.length === 0) {
+            validInput = false;
+            $('#question').addClass('error');
+            $('.error-summary').show();
+            $('body').scrollTop(0);
+            $('.error-summary').focus();
+            $('.label-error.a').show();
+        }
+        
+        if (validInput) {
+            if (changing == "true") {
+                go('/request-type');
+            } else {
+                go('/request-type');
+            }
+        }
+    }
+</script>
+{% endblock %}

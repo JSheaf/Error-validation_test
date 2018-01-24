@@ -1,0 +1,143 @@
+{% extends 'layout-fixed.html' %} {% block head %} {% include 'includes/head.html' %} {% endblock %} {% block content %} {% include 'includes/back.html' %}
+
+<div class="grid-row no-bottom">
+    <div class="column-two-thirds no-bottom">
+
+        <div class="error-summary hide">
+            <div class="error-title">There was a problem</div>
+            <div class="error-description">Please amend the following details:</div>
+            <ul class="error-list">
+                <li><a href="#question1">Select an option</a></li>
+
+            </ul>
+        </div>
+
+        <div class="row">
+            <div class="col-9">
+                <h1 class="margin-top-2 heading-large">What phase is the project in?</h1>
+                <div class="form-group" id="question1">
+                    <fieldset>
+                        <legend>
+                            <span class="error-message a">
+                            Select all that apply
+                            </span>
+                        </legend>
+                        <div>
+                            <fieldset>
+                                <div class="multiple-choice" id="question1">
+                                    <input id="radio1" type="radio" name="radioSelect" value="Discovery">
+                                    <label for="radio-inline-1">Discovery</label>
+                                </div>
+                                <div class="multiple-choice">
+                                    <input id="radio2" type="radio" name="radioSelect" value="Alpha">
+                                    <label for="radio-inline-2">Alpha</label>
+                                </div>
+                                <div class="multiple-choice">
+                                    <input id="radio3" type="radio" name="radioSelect" value="Beta (private)">
+                                    <label for="radio-inline-3">Beta (private)</label>
+                                </div>
+                                <div class="multiple-choice">
+                                    <input id="radio4" type="radio" name="radioSelect" value="Beta (public)">
+                                    <label for="radio-inline-4">Beta (public)</label>
+                                </div>
+
+                            </fieldset>
+                        </div>
+
+
+                    </fieldset>
+                </div>
+
+
+                <div id="otherInput" class="form-group hide">
+                    <div class="inset">
+                        <label for="otherInput">
+                            <div class="label-title">Please specify</div>
+                        </label>
+                        <input class="form-control form-control-2-3" id="otherValue" name="otherValue" type="text" value="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-3">
+                <aside class="bar margin-top-7">
+                    <div class="aside-title">Do you need Creative Services?</div>
+                    <p>Creative Services provide:</p>
+                    <li>print work</li>
+                    <li>posters</li>
+                    <li>news letters</li>
+
+                    <p>Your request will take around 5 minutes.</p>
+                    <div class="aside-action">
+                        <a href="#">Creative Services work request form</a>
+                        <div class="aside-title margin-top-2">Before you start</div>
+                        <p class="margin-top-1">Check you're using the correct service.</p>
+                    </div>
+                </aside>
+            </div>
+        </div>
+
+        <button class="btn btn-primary">Next</button>
+
+ <script type="text/javascript">
+    if (member.questions === undefined) {
+        member.questions = {};
+    }
+
+    $(".btn").click(function () {
+        validate();
+    });
+
+    $(document).ready(checkSelected());
+
+    $("input[name='select-group']").change(function () {
+        checkSelected();
+    });
+
+    function checkSelected() {
+        if ($('input[id=Other]:checked').val() === 'Other') {
+            $('#otherInput').show();
+        } else {
+            $('#otherInput').hide();
+        }
+    }
+
+
+
+    function validate() {
+
+        var value = $('input[name=radioSelect]:checked').val();
+    
+        if ((value === '') || (value === undefined)) {
+            $('#question1').addClass('form-group error');
+            $('.error-message').show();
+            $('.error-summary').show();
+            $('body').scrollTop(0);
+            $('.error-summary').focus(); 
+        } else {
+            var value = $('input[name=radioSelect]:checked').val();
+            var otherValue = $('#otherValue').val();
+            
+            member.questions.requestType = [];
+
+            $('input[name=radioSelect]:checked').each(function (num, el) {
+                if (el.getAttribute('value') != 'Other') {
+                    member.questions.requestType.push(el.getAttribute('value'));
+                } else {
+                    if (otherValue == '') {
+                        member.questions.requestType.push(el.getAttribute('value'));
+                    } else {
+                        member.questions.requestType.push(otherValue);
+                    }
+                }
+            });
+
+            member.questions.requestType.otherValue = otherValue;
+
+            go('/project-info');
+
+        }
+        
+    }
+</script>
+{% endblock %}

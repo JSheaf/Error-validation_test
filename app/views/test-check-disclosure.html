@@ -1,0 +1,182 @@
+{% extends 'layout-fixed.html' %} {% block head %} {% include 'includes/head.html' %} {% endblock %} {% block content %} {% include 'includes/back.html' %}
+
+<main id="content" role="main">
+    <div class="grid-row">
+        <div class="column-two-thirds">
+
+            <div class="error-summary hide">
+                <div class="error-title">There was a problem</div>
+                <div class="error-description">Please amend the following details:</div>
+                <ul class="error-list">
+                    <li class="label-error a"><a href="#question2">Select an option</a></li>
+
+                    <li class="form-control label-error"><a href="#other">Provide a request type</a></li>
+                </ul>
+            </div>
+
+            <h1 class="heading-large">What type of request do you have?</h1>
+
+            <form>
+
+                <div id="question" class="form-group">
+
+                    <fieldset>
+
+                        <legend>
+                            Select all that apply
+                        </legend>
+
+                        <div class="label-error a hide">
+                            Select a contact method
+                        </div>
+
+                        <div>
+                            <fieldset>
+
+                                <div class="multiple-choice">
+                                    <input id="internalDvlaservice" name="select-group" type="checkbox" value="Internal DVLA service">
+                                    <label for="internal-dvla-service">Internal DVLA service</label>
+                                </div>
+
+                                <div class="multiple-choice">
+                                    <input id="continuousImprovement" name="select-group" type="checkbox" value="Continuous improvement">
+                                    <label for="continuous-improvement">Continuous improvement</label>
+                                </div>
+
+                                <div class="multiple-choice">
+                                    <input id="missionPatches" name="select-group" type="checkbox" value="Mission patches">
+                                    <label for="mission-patches">Mission patches</label>
+                                </div>
+
+                                <div class="multiple-choice">
+                                    <input id="digitalServices" name="select-group" type="checkbox" value="Digital services">
+                                    <label for="digital-services">Digital services</label>
+                                </div>
+
+                                <div class="multiple-choice">
+                                    <input id="accessibilityAuditing" name="select-group" type="checkbox" value="Accessibility auditing">
+                                    <label for="accessibility-auditing">Accessibility auditing</label>
+                                </div>
+
+                                <div class="multiple-choice margin-bottom-5">
+                                    <input id="other" name="select-group" type="checkbox" value="Text message">
+                                    <label for="other">By text message (SMS)</label>
+                                </div>
+
+                            </fieldset>
+
+                            <div id="mobileNumber" class="form-group hide">
+
+                                <div class="inset" id="qmobileNum">
+                                    <label for="mobileNum">
+                                        <div class="label-title">Mobile number</div>
+                                        <div class="form-control label-error">Provide a valid mobile number</div>
+                                        <input class="form-control form-control-1-4" id="mobileNum" name="mobileNum" type="text" value="">
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
+            </form>
+            <button class="btn btn-primary">Next</button>
+            </div>
+        </div>
+</main>
+
+<script type="text/javascript">
+    $(".btn-primary").click(function () {
+        // Enter function name here
+        validate();
+    });
+
+    if (member.questions === undefined) {
+        member.questions = {};
+    }
+
+    // Hide before rechecking validation
+    hideerror('.label-error');
+    $(".error").removeClass("error ");
+    $('.error-summary').hide();
+
+    // Check if user has been sent back from summary page
+    var changing = location.search.split('change=')[1];
+
+    $(document).ready(checkSelected());
+
+    $("input[name='select-group']").change(function () {
+
+        hideerror('.label-error');
+        $(".error").removeClass("error ");
+        $('.error-summary').hide();
+
+        checkSelected();
+    });
+
+    function checkSelected() {
+        if ($('input[id=other]:checked').val() === 'Text message') {
+            $('#mobileNumber').show();
+        } else {
+            $('#mobileNumber').hide();
+        }
+    }
+
+    function validate() {
+        // Hide before rechecking validation
+        hideerror('.label-error');
+        $(".error").removeClass("error ");
+        $('.error-summary').hide();
+
+        var value = $('input[name=select-group]:checked');
+        var other = $('input[name=mobileNum]').val();
+
+        var validInput = true;
+
+        var mobile = false;
+        var email = false;
+
+        if ($('input[id=other]:checked').length === 1) {
+            mobile = true;
+        }
+        if ($('input[id=emailChoice]:checked').length === 1) {
+            email = true;
+        }
+
+        member.questions.selectGroup = [];
+
+        //this part is what tells member to remember more than one value
+        $('input[name=select-group]:checked').each(function (num, el) {
+            member.questions.selectGroup.push(el.getAttribute('value'));
+        });
+
+        if (mobile) {
+            if (other.length > 0) {
+                member.questions.selectGroup.mobile = other;
+            } else {
+                $('#qmobileNum').addClass('error');
+                $('.form-control.label-error').show();
+                $('.error-summary').show();
+                $('body').scrollTop(0);
+                $('.error-summary').focus();
+                validInput = false;
+            }
+        }
+
+        if (!mobile && !email) {
+            validInput = false;
+            $('#question').addClass('error');
+            $('.error-summary').show();
+            $('body').scrollTop(0);
+            $('.error-summary').focus();
+            $('.label-error.a').show();
+        }
+
+        if (validInput) {
+            if (validInput && changing == "true" && (value !== 'undefined')) {
+                go('/DVLA/check-your-answers');
+            } else if (validInput && (value !== 'undefined')) {
+                go('/DVLA/check-your-answers');
+            }
+        }
+    }
+</script>
+{% endblock %}

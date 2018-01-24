@@ -1,0 +1,34 @@
+@import 'dvla-internal-elements-node';
+
+.day-form {
+    width:66px;
+    display: inline-block;
+}
+
+.month-form {
+    width:66px;
+    margin-left:8px;
+    display: inline-block;
+    
+}
+.year-form {
+    width:88px;
+    margin-left:8px;
+    display: inline-block;
+    margin-right: -10px;
+}
+
+.boxed {
+  border: 2px solid $grey-2;
+    width: 100%;
+  margin-bottom:40px;
+  padding: 0.5em;
+}
+
+.boxed-content {
+    float:right;
+}
+
+.inset.error {
+    border-left: 6px solid #B10F1E;
+}

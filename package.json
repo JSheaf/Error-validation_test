@@ -1,0 +1,38 @@
+{
+  "name": "dvla_internal_prototype_kit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "engines": {
+    "node": ">=7.4.0 <9.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "gulp develop"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liam-betsworth/dvla_internal_prototype_kit.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/liam-betsworth/dvla_internal_prototype_kit/issues"
+  },
+  "homepage": "https://github.com/liam-betsworth/dvla_internal_prototype_kit#readme",
+  "dependencies": {
+    "dvla-internal-frontend-toolkit": "^1.0.1",
+    "express": "^4.16.2",
+    "member.js": "^1.0.0",
+    "npm": "^5.5.1",
+    "nunjucks": "^3.0.1",
+    "tick-of-truth": "^1.0.0",
+    "timmy.js": "^1.0.0"
+  },
+  "devDependencies": {
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-sass": "^3.1.0"
+  }
+}

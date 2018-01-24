@@ -1,0 +1,44 @@
+{% extends 'layout-fixed.html' %} {% block head %} {% include 'includes/head.html' %} {% endblock %} {% block content %}
+<div class="row">
+    <div class="col-9">
+        <h1 class="margin-top-2.5">Interaction design work request form</h1>
+        <p class="lede">Use this service to make a request for the Interaction design team to do some work for you.</p>
+        <p class="text-large">This includes:</p>
+        <ul class="list-bulleted text-large">
+            <li>internal DVLA service</li>
+            <li>digital services hosted on Gov.uk</li>
+            <li>mission patches</li>
+            <li>accessibility auditing</li>
+            <li>etc...</li>
+        </ul>
+
+        
+    </div>
+</div>
+<p>Making a request takes around 5 minutes.</p>
+
+<button class="btn-lrg btn-primary padding-">Start now</button>
+
+
+<h2 class="heading-medium">Before you start</h2>
+<li>check you're using the correct service</li>
+<p>You can also <a href="#">contact creative services</a>.</p>
+
+
+<script type="text/javascript">
+    $(".btn-lrg").click(function () {
+
+        validate();
+    });
+    
+    if (member.questions === undefined) {
+        member.questions = {};
+    }
+
+    function validate() {
+        member.clear();
+        go('/request-type');
+    }
+</script>
+
+{% endblock %}
